@@ -1,0 +1,6 @@
+django
+django-rest-framework
+django-redis
+pytest-django
+pytest-pythonpath
+snapshottest
