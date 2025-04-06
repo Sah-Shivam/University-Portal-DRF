@@ -3,10 +3,12 @@
 import os
 import sys
 
+# ✅ Add this to fix module import errors
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'university.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'university_app.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
