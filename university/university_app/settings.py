@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'students_app',
     'university_app',
+    "api",
     'django_redis',
 ]
 
