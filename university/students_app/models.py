@@ -11,6 +11,26 @@ class Student(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class Author(models.Model):
+    author_id = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
+    genre = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+    
+class Book(models.Model):
+    book_id = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    genre = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.title
+
+
 
 # class University(models.Model):
 #     name = models.CharField(max_length=255)
