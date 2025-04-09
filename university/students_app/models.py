@@ -4,89 +4,114 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+# class Student(models.Model):
+#     student_id = models.CharField(max_length=100)
+#     name = models.CharField(max_length=100)
+#     branch = models.CharField(max_length=100)
+
+#     def __str__(self):
+#         return self.name
+    
+
+# class Author(models.Model):
+#     author_id = models.CharField(max_length=100)
+#     name = models.CharField(max_length=100)
+#     genre = models.CharField(max_length=100)
+
+#     def __str__(self):
+#         return self.name
+    
+# class Book(models.Model):
+#     book_id = models.CharField(max_length=100)
+#     title = models.CharField(max_length=100)
+#     author = models.ForeignKey(Author, on_delete=models.CASCADE)
+#     genre = models.CharField(max_length=100)
+
+#     def __str__(self):
+#         return self.title
+
+
 class Student(models.Model):
-    student_id = models.CharField(max_length=100)
+    student_id = models.CharField(max_length=100,unique=True)
     name = models.CharField(max_length=100)
     branch = models.CharField(max_length=100)
+    age = models.IntegerField(default=20)
+    email = models.EmailField(unique=True, null=True, blank=True)
+    enrolled_date = models.DateField(auto_now_add=True, null=True)
+
 
     def __str__(self):
         return self.name
-    
 
 class Author(models.Model):
     author_id = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     genre = models.CharField(max_length=100)
+    nationality = models.CharField(max_length=100)
+    birth_date = models.DateField()
 
     def __str__(self):
         return self.name
-    
+
 class Book(models.Model):
     book_id = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     genre = models.CharField(max_length=100)
+    publish_date = models.DateField()
+    isbn = models.CharField(max_length=13)
+    copies = models.IntegerField()
 
     def __str__(self):
         return self.title
 
+class Course(models.Model):
+    course_code = models.CharField(max_length=10)
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    credits = models.IntegerField()
+    instructor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
+    def __str__(self):
+        return self.title
 
-# class University(models.Model):
-#     name = models.CharField(max_length=255)
-#     location = models.CharField(max_length=255)
-#     founded_year = models.IntegerField()
-#     accreditation = models.CharField(max_length=255)
+class Enrollment(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    date_enrolled = models.DateField(auto_now_add=True)
+    grade = models.CharField(max_length=2, null=True, blank=True)
 
+class Department(models.Model):
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=10)
+    head = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    faculty = models.ManyToManyField(User, related_name="departments")
+    established_year = models.PositiveIntegerField()
 
-# class Department(models.Model):
-#     name = models.CharField(max_length=100)
-#     head_of_department = models.CharField(max_length=255)
-#     description = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
+class Library(models.Model):
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=255)
+    incharge = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    students = models.ManyToManyField(Student)
+    total_books = models.IntegerField()
 
+class Event(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    date = models.DateField()
+    attendees = models.ManyToManyField(Student)
+    organizer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
-# class Professor(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     department = models.ForeignKey(Department, on_delete=models.CASCADE)
-#     qualification = models.CharField(max_length=255)
-#     expertise = models.TextField()
+class Assignment(models.Model):
+    title = models.CharField(max_length=100)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    due_date = models.DateField()
+    max_marks = models.IntegerField()
+    assigned_to = models.ManyToManyField(Student)
 
+class Attendance(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    date = models.DateField()
+    status = models.CharField(max_length=10, choices=[('Present', 'Present'), ('Absent', 'Absent')])
 
-# class Course(models.Model):
-#     name = models.CharField(max_length=255)
-#     code = models.CharField(max_length=10, unique=True)
-#     department = models.ForeignKey(Department, on_delete=models.CASCADE)
-#     professors = models.ManyToManyField(Professor)
-#     credits = models.IntegerField()
-
-
-# class Student(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     enrollment_number = models.CharField(max_length=20, unique=True)
-#     department = models.ForeignKey(Department, on_delete=models.CASCADE)
-#     date_of_birth = models.DateField()
-#     courses = models.ManyToManyField(Course)
-
-
-# class Enrollment(models.Model):
-#     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-#     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-#     date_enrolled = models.DateField()
-#     status = models.CharField(max_length=50)
-
-
-# class Marksheet(models.Model):
-#     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-#     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-#     marks = models.IntegerField()
-#     term = models.CharField(max_length=20)
-#     year = models.IntegerField()  
-
-
-
-
-
-
-
-0
